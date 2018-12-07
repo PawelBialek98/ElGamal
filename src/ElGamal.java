@@ -1,4 +1,10 @@
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 import java.security.MessageDigest;
@@ -63,5 +69,35 @@ public class ElGamal {
 
     public BigInteger getA() {
         return a;
+    }
+
+    public void saveToFile(byte[] cipheredText, String filePath){
+        Path path = Paths.get(filePath);
+        try{
+            Files.write(path, cipheredText);
+        }
+        catch (IOException e) {
+            System.out.println("Exception Occurred:");
+        }
+    }
+
+    public byte[] readFromFile(String filePath){
+        File plik = new File(filePath);
+        byte[] fileContent = new byte[(int) plik.length()];
+        FileInputStream fin = null;
+        try{
+            fin = new FileInputStream(plik);
+            fin.read(fileContent);
+        }
+        catch (Exception ae){
+            System.out.println("Blad " + ae);
+        }
+        try {
+            fin.close();
+        }
+        catch (Exception ea){
+            System.out.println("Blad " + ea);
+        }
+        return fileContent;
     }
 }
