@@ -1,23 +1,67 @@
 import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
 import java.util.Random;
+import java.security.MessageDigest;
 
 public class ElGamal {
 
+    private BigInteger a,A,p,g,r,s,H;
+
+    BigInteger TWO = BigInteger.valueOf(2);
+
     public void keyGen(){
-        BigInteger p, q, g;
+        BigInteger q;
         Random rnd = new Random();
         do{
             p = BigInteger.probablePrime(1024, rnd);            //p liczba pierwsza
-            q = p.subtract(BigInteger.ONE).divide(BigInteger.TWO);
+            q = p.subtract(BigInteger.ONE).divide(TWO);
         }while(q.isProbablePrime(100));
 
         do {
             g = new BigInteger(1023, rnd);                         //g pierwiatek pierwotny g mod p
-        }while(!g.modPow(BigInteger.TWO,p).equals(BigInteger.ONE) & !g.modPow(q,p).equals(BigInteger.ONE));
+        }while(!g.modPow(TWO,p).equals(BigInteger.ONE) & !g.modPow(q,p).equals(BigInteger.ONE));
 
-        BigInteger a = new BigInteger(1023, rnd);
+        a = new BigInteger(1023, rnd);
 
-        BigInteger B = g.modPow(a,p);
+        A = g.modPow(a,p);
     }
 
+    public void generate(byte[] plain){
+        BigInteger k;
+        Random rnd = new Random();
+        k = new BigInteger(1023, rnd);
+        r = g.modPow(k,p);
+        MessageDigest h=null;
+        try {
+            h = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e){ System.err.println("Nie ma takiego algorytmu");}
+        byte[] hash = h.digest(plain);
+        H = new BigInteger(hash);
+        BigInteger pom = H.subtract(a.multiply(r));
+        s = pom.modInverse(p.subtract(BigInteger.ONE));
+    }
+
+    public boolean verify(){
+        if(r.compareTo(BigInteger.ONE)!=-1 && r.compareTo(p.subtract(BigInteger.ONE))!=1){
+            BigInteger pom = pow(A,r).multiply(pow(r,s));
+            BigInteger tmp = pow(g,H);
+            if(pom.mod(p).equals(tmp)) return true;
+            else return false;
+        }
+        else return false;
+    }
+
+    public BigInteger pow(BigInteger base, BigInteger exp){
+        BigInteger result = BigInteger.ONE;
+        while (exp.signum() > 0) {
+            if (exp.testBit(0)) result = result.multiply(base);
+            base = base.multiply(base);
+            exp = exp.shiftRight(1);
+        }
+        return result;
+    }
+
+    public BigInteger getA() {
+        return a;
+    }
 }
