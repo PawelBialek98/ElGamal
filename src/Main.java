@@ -16,7 +16,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         window = primaryStage;
-        window.setTitle("Hello World");
+        window.setTitle("Podpis cyfrowy");
 
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(15, 15, 15, 15));
@@ -42,6 +42,28 @@ public class Main extends Application {
 
         Button buttonVerify = new Button("Sprawdź");
         GridPane.setConstraints(buttonVerify,1,3);
+
+        Files files = new Files();
+
+        buttonSign.setOnAction(e ->{
+            Signature signature = new Signature();
+            signature.keyGen();
+            files.publicKeyToFile(signature.getP(),signature.getG(),signature.getA());
+            byte[] toSign = files.readFromFile(fileInput.getText());
+            signature.generate(toSign);
+            files.SignatureToFile(signature.getR(),signature.getS());
+        });
+
+        buttonVerify.setOnAction(e ->{
+            BigInteger key[] = files.readNumbers("C:\\Users\\Łukasz\\Desktop\\key.txt", 3);
+            BigInteger sign[] = files.readNumbers("C:\\Users\\Łukasz\\Desktop\\signature.txt", 2);
+            byte[] toVerify = files.readFromFile(verifyInput.getText());
+            Verification  verification = new Verification(key[0],key[1],key[2],files.hashAFile(toVerify),sign[0],sign[1]);
+            if (verification.verify())AlertBox.display("Podpis jest prawidłowy");
+            else AlertBox.display("Podpis jest nieprawidłowy");
+            /*if (verification.verify())System.out.println("siuuuusiaaaak");
+            else System.out.println("SIUSIAG");*/ //to jest jakby alertbox miał nie działąć ale na 95% działa
+        });
 
         grid.getChildren().addAll(signLabel,fileInput,buttonSign,verifyLabel,verifyInput,buttonVerify);
         Scene scene = new Scene(grid, 400, 275);

@@ -1,11 +1,9 @@
 import java.math.BigInteger;
-import java.security.NoSuchAlgorithmException;
 import java.util.Random;
-import java.security.MessageDigest;
 
 public class Signature {
 
-    private BigInteger a,p,g,A,r,s,H;
+    private BigInteger a,p,g,A,r,s;
 
     BigInteger TWO = BigInteger.valueOf(2);
 
@@ -27,18 +25,15 @@ public class Signature {
     }
 
     public void generate(byte[] plain){
+        BigInteger H;
+        Files file = new Files();
         BigInteger k;
         Random rnd = new Random();
         do {
             k = new BigInteger(1023, rnd);
         }while (k.gcd(p.subtract(BigInteger.ONE)).equals(BigInteger.ONE));
         r = g.modPow(k,p);
-        MessageDigest h=null;
-        try {
-            h = MessageDigest.getInstance("MD5");
-        } catch (NoSuchAlgorithmException e){ System.err.println("Nie ma takiego algorytmu");}
-        byte[] hash = h.digest(plain);
-        H = new BigInteger(hash);
+        H = file.hashAFile(plain);
         BigInteger pom = H.subtract(a.multiply(r));
         s = pom.modInverse(p.subtract(BigInteger.ONE));
     }
@@ -61,9 +56,5 @@ public class Signature {
 
     public BigInteger getS() {
         return s;
-    }
-
-    public BigInteger getH() {
-        return H;
     }
 }

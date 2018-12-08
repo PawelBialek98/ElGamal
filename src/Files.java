@@ -2,6 +2,8 @@ import java.io.*;
 import java.math.BigInteger;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
 public class Files {
@@ -50,15 +52,28 @@ public class Files {
         }catch (FileNotFoundException e){ System.out.println("Nie ma takiego pliku");}
     }
 
-    public BigInteger[] readNumbers(String path, int size)throws FileNotFoundException{
+    public BigInteger[] readNumbers(String path, int size){
         BigInteger tab[] = new BigInteger[size];
-        Scanner in = new Scanner(new File(path));
+        Scanner in = null;
+        try{
+            in = new Scanner(new File(path));
+        }catch (FileNotFoundException e){ System.out.println("Nie ma takiego pliku");}
         int i=0;
         while(in.hasNextBigInteger()){
             tab[i]=in.nextBigInteger();
             i++;
         }
         return tab;
+    }
+
+    public BigInteger hashAFile(byte[] plain){
+        MessageDigest h=null;
+        try {
+            h = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e){ System.err.println("Nie ma takiego algorytmu");}
+        byte[] hash = h.digest(plain);
+        BigInteger H = new BigInteger(hash);
+        return H;
     }
 
 }
