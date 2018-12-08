@@ -7,6 +7,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.math.BigInteger;
+
 public class Main extends Application {
 
     Stage window;
@@ -45,6 +47,7 @@ public class Main extends Application {
         Scene scene = new Scene(grid, 400, 275);
         window.setScene(scene);
         window.show();
+
     }
     public static void main(String[] args) {
         launch(args);
