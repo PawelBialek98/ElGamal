@@ -55,8 +55,8 @@ public class Main extends Application {
         });
 
         buttonVerify.setOnAction(e ->{
-            BigInteger key[] = files.readNumbers("C:\\Users\\Łukasz\\Desktop\\key.txt", 3);
-            BigInteger sign[] = files.readNumbers("C:\\Users\\Łukasz\\Desktop\\signature.txt", 2);
+            BigInteger key[] = files.readNumbers("/Users/pawelbialek/Desktop/key.txt", 3);
+            BigInteger sign[] = files.readNumbers("/Users/pawelbialek/Desktop/signature.txt", 2);
             byte[] toVerify = files.readFromFile(verifyInput.getText());
             Verification  verification = new Verification(key[0],key[1],key[2],files.hashAFile(toVerify),sign[0],sign[1]);
             if (verification.verify())AlertBox.display("Podpis jest prawidłowy");

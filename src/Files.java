@@ -38,7 +38,7 @@ public class Files {
     }
 
     public void publicKeyToFile(BigInteger p, BigInteger g, BigInteger A){
-        try (PrintWriter out = new PrintWriter("C:\\Users\\Łukasz\\Desktop\\key.txt")) {
+        try (PrintWriter out = new PrintWriter("/Users/pawelbialek/Desktop/key.txt")) {
             out.println(p);
             out.println(g);
             out.println(A);
@@ -46,7 +46,7 @@ public class Files {
     }
 
     public void SignatureToFile(BigInteger r, BigInteger s){
-        try (PrintWriter out = new PrintWriter("C:\\Users\\Łukasz\\Desktop\\signature.txt")) {
+        try (PrintWriter out = new PrintWriter("/Users/pawelbialek/Desktop/signature.txt")) {
             out.println(r);
             out.println(s);
         }catch (FileNotFoundException e){ System.out.println("Nie ma takiego pliku");}

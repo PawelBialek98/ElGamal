@@ -15,10 +15,13 @@ public class Verification {
 
     public boolean verify(){
         if(r.compareTo(BigInteger.ONE)!=-1 && r.compareTo(p.subtract(BigInteger.ONE))!=1){
-            BigInteger pom = pow(A,r).multiply(pow(r,s));
-            System.out.println("czy ja wgl jestem tutaj ??");
-            BigInteger tmp = pow(g,H);
-            if(pom.mod(p).equals(tmp)) return true;
+            //BigInteger pom = pow(A,r).multiply(pow(r,s));
+            BigInteger pom = A.modPow(r,p).multiply(r.modPow(s,p));
+            //System.out.println("czy ja wgl jestem tutaj ??");
+            //BigInteger tmp = pow(g,H);
+            BigInteger tmp = g.modPow(H,p);
+            if(pom.equals(tmp)) return true;
+            //if(pom.mod(p).equals(tmp)) return true;
             else return false;
         }
         else return false;

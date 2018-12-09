@@ -31,11 +31,13 @@ public class Signature {
         Random rnd = new Random();
         do {
             k = new BigInteger(1023, rnd);
-        }while (k.gcd(p.subtract(BigInteger.ONE)).equals(BigInteger.ONE));
+        }while (!k.gcd(p.subtract(BigInteger.ONE)).equals(BigInteger.ONE));
+        System.out.println(k.gcd(p.subtract(BigInteger.ONE)));
         r = g.modPow(k,p);
         H = file.hashAFile(plain);
         BigInteger pom = H.subtract(a.multiply(r));
-        s = pom.modInverse(p.subtract(BigInteger.ONE));
+        //System.out.println();
+        s = pom.multiply(k.modInverse(p.subtract(BigInteger.ONE)));
     }
 
     public BigInteger getP() {
