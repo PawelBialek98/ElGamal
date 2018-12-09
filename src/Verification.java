@@ -19,6 +19,7 @@ public class Verification {
             BigInteger pom = A.modPow(r,p).multiply(r.modPow(s,p));
             //System.out.println("czy ja wgl jestem tutaj ??");
             //BigInteger tmp = pow(g,H);
+            pom = pom.mod(p);
             BigInteger tmp = g.modPow(H,p);
             if(pom.equals(tmp)) return true;
             //if(pom.mod(p).equals(tmp)) return true;
